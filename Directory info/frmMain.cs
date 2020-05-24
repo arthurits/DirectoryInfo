@@ -141,8 +141,9 @@ namespace Directory_info
             splitVertical.Size = splitHorizontal.Panel1.ClientSize;
             lbxHistory.Size = splitHorizontal.Panel2.ClientSize;
             lstLista.Size = splitVertical.Panel1.ClientSize;
-            lstLista.Height -= 3;
+            lstLista.Height -= 4;
             chart.Size = splitVertical.Panel2.ClientSize;
+            chart.Height -= 4;
         }
         #endregion Eventos del formulario
 
@@ -687,7 +688,7 @@ namespace Directory_info
             // Añadir la columna 2
             encabezado = new ColumnHeader();
             encabezado.Text = "Tamaño (MB)";
-            encabezado.Width = 76;
+            encabezado.Width = 95;
             encabezado.TextAlign = HorizontalAlignment.Right;
 
             lstLista.Columns.Add(encabezado);
@@ -695,7 +696,7 @@ namespace Directory_info
             // Añadir la columna 3
             encabezado = new ColumnHeader();
             encabezado.Text = "Porcentaje (%)";
-            encabezado.Width = 80;
+            encabezado.Width = 110;
             encabezado.TextAlign = HorizontalAlignment.Right;
 
             lstLista.Columns.Add(encabezado);
@@ -703,7 +704,7 @@ namespace Directory_info
             // Añadir la columna 4
             encabezado = new ColumnHeader();
             encabezado.Text = "Carpetas";
-            encabezado.Width = 54;
+            encabezado.Width = 80;
             encabezado.TextAlign = HorizontalAlignment.Right;
 
             lstLista.Columns.Add(encabezado);
@@ -711,7 +712,7 @@ namespace Directory_info
             // Añadir la columna 5
             encabezado = new ColumnHeader();
             encabezado.Text = "Archivos";
-            encabezado.Width = 53;
+            encabezado.Width = 80;
             encabezado.TextAlign = HorizontalAlignment.Right;
 
             lstLista.Columns.Add(encabezado);
@@ -743,7 +744,7 @@ namespace Directory_info
             chartSeries.ChartType = SeriesChartType.Pie;
             chartSeries.IsValueShownAsLabel = true;
             chartSeries.LabelFormat = "#.##";
-            chartSeries.LabelAngle = 30;
+            chartSeries.LabelAngle = 0;
             chartSeries.Legend = "PorcentajeL";
             chartSeries.Name = "Porcentaje";
             chartSeries["PieDrawingStyle"] = "SoftEdge";
