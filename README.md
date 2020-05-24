@@ -9,6 +9,6 @@ Latest release: alpha v0.1     |     [Downloading & release notes](https://githu
 Main GUI
 <p align="center">
 	<kbd>
-		<img src="/Media/Screenshot 01.png?raw=true" width="1051" height="719" border="2"/>
+		<img src="/Media/Screenshot 01.png?raw=true" border="2"/>
 	</kbd>
 </p>
