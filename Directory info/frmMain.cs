@@ -207,6 +207,11 @@ namespace Directory_info
                 hilo.SetDirRuta(dir.FullName);
 
                 // Iniciar el hilo
+                // Lo más recomendable actualmente sería
+                // return await Task.Run(() =>
+                // {
+                // });
+                // https://www.pluralsight.com/guides/using-task-run-async-await
                 thread = new Thread(new ThreadStart(hilo.HiloProc));
                 thread.Start();
             
@@ -1071,7 +1076,6 @@ namespace Directory_info
         }
 
         #endregion Program settings
-
     }
 
 }
