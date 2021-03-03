@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -58,6 +59,7 @@
             this.splitHorizontal = new System.Windows.Forms.SplitContainer();
             this.lbxHistory = new System.Windows.Forms.ListBox();
             this.lblResults = new System.Windows.Forms.Label();
+            this.Plot = new ScottPlot.FormsPlot();
             this.mnuMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitVertical)).BeginInit();
             this.splitVertical.Panel1.SuspendLayout();
@@ -240,6 +242,7 @@
             // 
             // splitVertical.Panel2
             // 
+            this.splitVertical.Panel2.Controls.Add(this.Plot);
             this.splitVertical.Panel2.Controls.Add(this.chart);
             this.splitVertical.Size = new System.Drawing.Size(1041, 450);
             this.splitVertical.SplitterDistance = 522;
@@ -339,6 +342,14 @@
             this.lblResults.Size = new System.Drawing.Size(1045, 82);
             this.lblResults.TabIndex = 6;
             // 
+            // Plot
+            // 
+            this.Plot.Location = new System.Drawing.Point(376, 323);
+            this.Plot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Plot.Name = "Plot";
+            this.Plot.Size = new System.Drawing.Size(127, 120);
+            this.Plot.TabIndex = 1;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -405,6 +416,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportarImagenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private ScottPlot.FormsPlot Plot;
     }
 }
 
