@@ -79,7 +79,24 @@ namespace Directory_info
                     PresentarResultados(listaDir);
                 }
             }
-            
+
+
+            // Plot test
+            double[] values = { 778, 43, 283, 76, 184 };
+            string[] labels = { "C#", "JAVA", "Python", "F#", "PHP" };
+
+            labels = Enumerable
+                .Range(0, values.Length)
+                .Select(i => $"{labels[i]}\n({values[i]})")
+                .ToArray();
+
+            Plot.plt.PlotPie(values, labels);
+
+            Plot.plt.Grid(false);
+            Plot.plt.Frame(false);
+            Plot.plt.Ticks(false, false);
+            Plot.Render();
+
         }
 
         /// <summary>
