@@ -26,7 +26,7 @@ namespace Directory_info
         private Thread thread;
 
         // For loading and saving program settings.
-        private Settings _settings = new Settings();
+        //private Settings _settings = new Settings();
         private ProgramSettings _programSettings;
         private static readonly string _programSettingsFileName = "DirectoryInfo.xml";
 
@@ -946,7 +946,7 @@ namespace Directory_info
         private void PresentarResultados(List <DirInfo> dirLista)
         {
             // Definición de variables
-            long lTamañoTotal = 0;
+            long lTamañoTotal;
             String strRuta = dirLista[0].Ruta;
             String strTexto;
             

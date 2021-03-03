@@ -282,7 +282,7 @@
             // statuslblInfo
             // 
             this.statuslblInfo.Name = "statuslblInfo";
-            this.statuslblInfo.Size = new System.Drawing.Size(881, 19);
+            this.statuslblInfo.Size = new System.Drawing.Size(912, 19);
             this.statuslblInfo.Spring = true;
             this.statuslblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
