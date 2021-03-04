@@ -53,6 +53,7 @@ namespace Directory_info
             // Función personalizada para inicializar el control ListView y el Chart
             InitializeListView();
             InitializeChart();
+            InitializeChart2();
 
             // Ajustar el tamaño
             SetSize();
@@ -66,6 +67,7 @@ namespace Directory_info
                 {
                     PopulateListView(listaDir);
                     PopulateChart(listaDir);
+                    PopulateChart2(listaDir);
 
                     //listaDir[0].Ruta.Substring(0, listaDir[0].Ruta.LastIndexOf("\\"));
 
@@ -81,7 +83,7 @@ namespace Directory_info
             }
 
 
-            // Plot test
+            /*
             double[] values = { 778, 43, 283, 76, 184 };
             string[] labels = { "C#", "JAVA", "Python", "F#", "PHP" };
 
@@ -90,12 +92,14 @@ namespace Directory_info
                 .Select(i => $"{labels[i]}\n({values[i]})")
                 .ToArray();
 
-            Plot.plt.PlotPie(values, labels);
 
-            Plot.plt.Grid(false);
-            Plot.plt.Frame(false);
-            Plot.plt.Ticks(false, false);
-            Plot.Render();
+            formsPlot1.plt.PlotPie(values, labels);
+
+            formsPlot1.plt.Grid(false);
+            formsPlot1.plt.Frame(false);
+            formsPlot1.plt.Ticks(false, false);
+            formsPlot1.Render();
+            */
 
         }
 
@@ -580,6 +584,7 @@ namespace Directory_info
 
             // Llenar el gráfico con la información recogida
             PopulateChart(dirLista);
+            PopulateChart2(dirLista);
 
             // Presentar los resultados
             PresentarResultados(dirLista);
@@ -632,6 +637,7 @@ namespace Directory_info
 
             // Llenar el gráfico con la información recogida
             PopulateChart(dirLista);
+            PopulateChart2(dirLista);
 
             // Mensaje en la barra de estado y cursor
             statuslblInfo.Text = "";
@@ -739,6 +745,85 @@ namespace Directory_info
 
             lstLista.Columns.Add(encabezado);
 
+        }
+
+        /// <summary>
+        /// Initializes the chart objets
+        /// </summary>
+        private void InitializeChart2()
+        {
+            formsPlot1.plt.Title("Folder percentage", fontSize: 16);
+            //formsPlot1.plt.YLabel("% Maximum holding time", fontSize: 14);
+            //formsPlot1.plt.XLabel("Time / s", fontSize: 14);
+            formsPlot1.plt.Colorset(ScottPlot.Drawing.Colorset.Nord);
+            //formsPlot1.plt.Axis(0, null, 0, 100);
+            //formsPlot1.plt.Grid(lineWidth: 1, color: Color.FromArgb(234, 234, 234), lineStyle: ScottPlot.LineStyle.Solid);
+            formsPlot1.plt.Legend(location: ScottPlot.legendLocation.lowerRight);
+            formsPlot1.plt.Grid(false);
+            formsPlot1.plt.Frame(false);
+            formsPlot1.plt.Ticks(false, false);
+            formsPlot1.Render();
+        }
+
+        private void PopulateChart2(List<DirInfo> dir)
+        {
+            // Data
+            Int32 nCollected = 0;
+            Int32 nPoints = dir.Count;
+
+            List<DirInfo> OrderedDir = dir.OrderByDescending(o => o.porcentaje).ToList();
+
+            // Optimal option
+            //dir.Sort((x, y) => y.porcentaje.CompareTo(x.porcentaje));
+
+            foreach (DirInfo d in OrderedDir)
+            {
+                if (d.porcentaje >= 3) nCollected++;
+                else break;
+            }
+
+
+            // Plot test
+            double[] values = new double[nCollected+1];
+            string[] labels = new string[nCollected+1];
+            
+            for (int i=0; i<nPoints; i++)
+            {
+                if (i < nCollected)
+                {
+                    values[i] = Math.Round(OrderedDir[i].porcentaje, 1);
+                    labels[i] = OrderedDir[i].Nombre;
+                }
+                else
+                {
+                    values[nCollected] += OrderedDir[i].porcentaje;
+                }
+            }
+
+            values[nCollected] = Math.Round(values[nCollected], 1);
+            labels[nCollected] = "Other < 3%";
+
+            labels = Enumerable
+                .Range(0, values.Length)
+                .Select(i => $"{labels[i]}")
+                .ToArray();
+
+            formsPlot1.plt.Clear();
+
+            formsPlot1.plt.PlotPie(values, labels, showPercentages: true, showValues: false, showLabels: false);
+            formsPlot1.plt.Legend(enableLegend: true, location: ScottPlot.legendLocation.lowerRight);
+
+            formsPlot1.plt.Grid(false);
+            formsPlot1.plt.Frame(false);
+            formsPlot1.plt.Ticks(false, false);
+            formsPlot1.plt.TightenLayout(padding: 0);
+            formsPlot1.plt.Style(figBg: Color.White);
+            formsPlot1.plt.Style(dataBg: Color.White);
+            formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
+
+            formsPlot1.Render();
+
+            
         }
 
         private void InitializeChart()
@@ -1068,7 +1153,7 @@ namespace Directory_info
                 // Cargar los datos de búsquedas de la sesión anterior
                 _programSettings.ReadDirList(listaDirHistoria);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex.Message, "Error loading the initial configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

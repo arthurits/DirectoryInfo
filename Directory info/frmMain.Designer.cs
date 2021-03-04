@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +52,7 @@
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lstLista = new System.Windows.Forms.ListView();
             this.splitVertical = new System.Windows.Forms.SplitContainer();
+            this.formsPlot1 = new ScottPlot.FormsPlot();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statuslblInfo = new System.Windows.Forms.ToolStripStatusLabel();
@@ -59,7 +60,6 @@
             this.splitHorizontal = new System.Windows.Forms.SplitContainer();
             this.lbxHistory = new System.Windows.Forms.ListBox();
             this.lblResults = new System.Windows.Forms.Label();
-            this.Plot = new ScottPlot.FormsPlot();
             this.mnuMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitVertical)).BeginInit();
             this.splitVertical.Panel1.SuspendLayout();
@@ -242,7 +242,7 @@
             // 
             // splitVertical.Panel2
             // 
-            this.splitVertical.Panel2.Controls.Add(this.Plot);
+            this.splitVertical.Panel2.Controls.Add(this.formsPlot1);
             this.splitVertical.Panel2.Controls.Add(this.chart);
             this.splitVertical.Size = new System.Drawing.Size(1041, 450);
             this.splitVertical.SplitterDistance = 522;
@@ -250,21 +250,30 @@
             this.splitVertical.TabIndex = 2;
             this.splitVertical.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitVertical_SplitterMoved);
             // 
+            // formsPlot1
+            // 
+            this.formsPlot1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.formsPlot1.Location = new System.Drawing.Point(0, 0);
+            this.formsPlot1.Margin = new System.Windows.Forms.Padding(4);
+            this.formsPlot1.Name = "formsPlot1";
+            this.formsPlot1.Size = new System.Drawing.Size(514, 450);
+            this.formsPlot1.TabIndex = 1;
+            // 
             // chart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
+            chartArea4.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart.Legends.Add(legend4);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(4);
             this.chart.Name = "chart";
             this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart.Series.Add(series1);
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart.Series.Add(series4);
             this.chart.Size = new System.Drawing.Size(496, 430);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
@@ -320,12 +329,13 @@
             // 
             // lbxHistory
             // 
+            this.lbxHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbxHistory.FormattingEnabled = true;
             this.lbxHistory.ItemHeight = 16;
             this.lbxHistory.Location = new System.Drawing.Point(0, 0);
             this.lbxHistory.Margin = new System.Windows.Forms.Padding(0);
             this.lbxHistory.Name = "lbxHistory";
-            this.lbxHistory.Size = new System.Drawing.Size(1044, 84);
+            this.lbxHistory.Size = new System.Drawing.Size(1045, 88);
             this.lbxHistory.TabIndex = 6;
             this.lbxHistory.SelectedIndexChanged += new System.EventHandler(this.lbxHistory_SelectedIndexChanged);
             this.lbxHistory.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lbxHistory_KeyUp);
@@ -341,14 +351,6 @@
             this.lblResults.Name = "lblResults";
             this.lblResults.Size = new System.Drawing.Size(1045, 82);
             this.lblResults.TabIndex = 6;
-            // 
-            // Plot
-            // 
-            this.Plot.Location = new System.Drawing.Point(376, 323);
-            this.Plot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Plot.Name = "Plot";
-            this.Plot.Size = new System.Drawing.Size(127, 120);
-            this.Plot.TabIndex = 1;
             // 
             // frmMain
             // 
@@ -416,7 +418,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportarImagenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private ScottPlot.FormsPlot Plot;
+        private ScottPlot.FormsPlot formsPlot1;
     }
 }
 
