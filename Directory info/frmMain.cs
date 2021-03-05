@@ -52,7 +52,7 @@ namespace Directory_info
 
             // Función personalizada para inicializar el control ListView y el Chart
             InitializeListView();
-            InitializeChart();
+            //InitializeChart();
             InitializeChart2();
 
             // Ajustar el tamaño
@@ -66,7 +66,7 @@ namespace Directory_info
                 foreach (List<DirInfo> listaDir in listaDirHistoria)
                 {
                     PopulateListView(listaDir);
-                    PopulateChart(listaDir);
+                    //PopulateChart(listaDir);
                     PopulateChart2(listaDir);
 
                     //listaDir[0].Ruta.Substring(0, listaDir[0].Ruta.LastIndexOf("\\"));
@@ -157,14 +157,14 @@ namespace Directory_info
         private void SetSize()
         {
             // Leave a small margin around the outside of the control
-            Size size = new Size(this.ClientSize.Width, this.ClientSize.Height - this.statusStrip1.ClientSize.Height - lblResults.ClientSize.Height - 28);
-            splitHorizontal.Size = size;
-            splitVertical.Size = splitHorizontal.Panel1.ClientSize;
-            lbxHistory.Size = splitHorizontal.Panel2.ClientSize;
-            lstLista.Size = splitVertical.Panel1.ClientSize;
-            lstLista.Height -= 4;
-            chart.Size = splitVertical.Panel2.ClientSize;
-            chart.Height -= 4;
+            //Size size = new Size(this.ClientSize.Width, this.ClientSize.Height - this.statusStrip1.ClientSize.Height - lblResults.ClientSize.Height - 28);
+            //splitHorizontal.Size = size;
+            //splitVertical.Size = splitHorizontal.Panel1.ClientSize;
+            //lbxHistory.Size = splitHorizontal.Panel2.ClientSize;
+            //lstLista.Size = splitVertical.Panel1.ClientSize;
+            //lstLista.Height -= 4;
+            //chart.Size = splitVertical.Panel2.ClientSize;
+            //chart.Height -= 4;
         }
         #endregion Eventos del formulario
 
@@ -583,7 +583,7 @@ namespace Directory_info
             PopulateListView(dirLista);
 
             // Llenar el gráfico con la información recogida
-            PopulateChart(dirLista);
+            //PopulateChart(dirLista);
             PopulateChart2(dirLista);
 
             // Presentar los resultados
@@ -636,7 +636,7 @@ namespace Directory_info
             PopulateListView(dirLista);
 
             // Llenar el gráfico con la información recogida
-            PopulateChart(dirLista);
+            //PopulateChart(dirLista);
             PopulateChart2(dirLista);
 
             // Mensaje en la barra de estado y cursor
@@ -753,16 +753,15 @@ namespace Directory_info
         private void InitializeChart2()
         {
             formsPlot1.plt.Title("Folder percentage", fontSize: 16);
-            //formsPlot1.plt.YLabel("% Maximum holding time", fontSize: 14);
-            //formsPlot1.plt.XLabel("Time / s", fontSize: 14);
             formsPlot1.plt.Colorset(ScottPlot.Drawing.Colorset.Nord);
-            //formsPlot1.plt.Axis(0, null, 0, 100);
-            //formsPlot1.plt.Grid(lineWidth: 1, color: Color.FromArgb(234, 234, 234), lineStyle: ScottPlot.LineStyle.Solid);
-            formsPlot1.plt.Legend(location: ScottPlot.legendLocation.lowerRight);
             formsPlot1.plt.Grid(false);
             formsPlot1.plt.Frame(false);
             formsPlot1.plt.Ticks(false, false);
-            formsPlot1.Render();
+            formsPlot1.plt.Legend(enableLegend: true, location: ScottPlot.legendLocation.lowerRight);
+            formsPlot1.plt.TightenLayout(padding: 0);
+            formsPlot1.plt.Style(figBg: Color.White);
+            formsPlot1.plt.Style(dataBg: Color.White);
+            formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
         }
 
         private void PopulateChart2(List<DirInfo> dir)
@@ -791,16 +790,18 @@ namespace Directory_info
             {
                 if (i < nCollected)
                 {
-                    values[i] = Math.Round(OrderedDir[i].porcentaje, 1);
+                    //values[i] = Math.Round(OrderedDir[i].porcentaje, 1);
+                    values[i] = OrderedDir[i].bytes;
                     labels[i] = OrderedDir[i].Nombre;
                 }
                 else
                 {
-                    values[nCollected] += OrderedDir[i].porcentaje;
+                    //values[nCollected] += OrderedDir[i].porcentaje;
+                    values[nCollected] += OrderedDir[i].bytes;
                 }
             }
 
-            values[nCollected] = Math.Round(values[nCollected], 1);
+            //values[nCollected] = Math.Round(values[nCollected], 1);
             labels[nCollected] = "Other < 3%";
 
             labels = Enumerable
@@ -809,21 +810,8 @@ namespace Directory_info
                 .ToArray();
 
             formsPlot1.plt.Clear();
-
             formsPlot1.plt.PlotPie(values, labels, showPercentages: true, showValues: false, showLabels: false);
-            formsPlot1.plt.Legend(enableLegend: true, location: ScottPlot.legendLocation.lowerRight);
-
-            formsPlot1.plt.Grid(false);
-            formsPlot1.plt.Frame(false);
-            formsPlot1.plt.Ticks(false, false);
-            formsPlot1.plt.TightenLayout(padding: 0);
-            formsPlot1.plt.Style(figBg: Color.White);
-            formsPlot1.plt.Style(dataBg: Color.White);
-            formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
-
             formsPlot1.Render();
-
-            
         }
 
         private void InitializeChart()

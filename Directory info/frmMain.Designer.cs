@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea36 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend36 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series36 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -218,12 +218,13 @@
             // 
             // lstLista
             // 
+            this.lstLista.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstLista.FullRowSelect = true;
             this.lstLista.HideSelection = false;
             this.lstLista.Location = new System.Drawing.Point(0, 0);
             this.lstLista.Margin = new System.Windows.Forms.Padding(4);
             this.lstLista.Name = "lstLista";
-            this.lstLista.Size = new System.Drawing.Size(488, 432);
+            this.lstLista.Size = new System.Drawing.Size(524, 465);
             this.lstLista.TabIndex = 1;
             this.lstLista.UseCompatibleStateImageBehavior = false;
             this.lstLista.View = System.Windows.Forms.View.Details;
@@ -232,8 +233,9 @@
             // 
             // splitVertical
             // 
-            this.splitVertical.Location = new System.Drawing.Point(0, 4);
-            this.splitVertical.Margin = new System.Windows.Forms.Padding(4);
+            this.splitVertical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitVertical.Location = new System.Drawing.Point(0, 0);
+            this.splitVertical.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.splitVertical.Name = "splitVertical";
             // 
             // splitVertical.Panel1
@@ -244,36 +246,37 @@
             // 
             this.splitVertical.Panel2.Controls.Add(this.formsPlot1);
             this.splitVertical.Panel2.Controls.Add(this.chart);
-            this.splitVertical.Size = new System.Drawing.Size(1041, 450);
-            this.splitVertical.SplitterDistance = 522;
+            this.splitVertical.Size = new System.Drawing.Size(1045, 465);
+            this.splitVertical.SplitterDistance = 524;
             this.splitVertical.SplitterWidth = 5;
             this.splitVertical.TabIndex = 2;
             this.splitVertical.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitVertical_SplitterMoved);
             // 
             // formsPlot1
             // 
+            this.formsPlot1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.formsPlot1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.formsPlot1.Location = new System.Drawing.Point(0, 0);
             this.formsPlot1.Margin = new System.Windows.Forms.Padding(4);
             this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(514, 450);
+            this.formsPlot1.Size = new System.Drawing.Size(516, 465);
             this.formsPlot1.TabIndex = 1;
             // 
             // chart
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chart.Legends.Add(legend4);
+            chartArea36.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea36);
+            legend36.Name = "Legend1";
+            this.chart.Legends.Add(legend36);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(4);
             this.chart.Name = "chart";
             this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.chart.Series.Add(series4);
+            series36.ChartArea = "ChartArea1";
+            series36.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series36.Legend = "Legend1";
+            series36.Name = "Series1";
+            this.chart.Series.Add(series36);
             this.chart.Size = new System.Drawing.Size(496, 430);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
@@ -309,8 +312,12 @@
             // 
             // splitHorizontal
             // 
-            this.splitHorizontal.Location = new System.Drawing.Point(0, 112);
-            this.splitHorizontal.Margin = new System.Windows.Forms.Padding(4);
+            this.splitHorizontal.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitHorizontal.BackColor = System.Drawing.SystemColors.Control;
+            this.splitHorizontal.Location = new System.Drawing.Point(0, 110);
+            this.splitHorizontal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.splitHorizontal.Name = "splitHorizontal";
             this.splitHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -321,21 +328,23 @@
             // splitHorizontal.Panel2
             // 
             this.splitHorizontal.Panel2.Controls.Add(this.lbxHistory);
-            this.splitHorizontal.Size = new System.Drawing.Size(1045, 553);
-            this.splitHorizontal.SplitterDistance = 460;
+            this.splitHorizontal.Size = new System.Drawing.Size(1045, 560);
+            this.splitHorizontal.SplitterDistance = 465;
             this.splitHorizontal.SplitterWidth = 5;
             this.splitHorizontal.TabIndex = 5;
             this.splitHorizontal.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitHorizontal_SplitterMoved);
             // 
             // lbxHistory
             // 
+            this.lbxHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbxHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbxHistory.FormattingEnabled = true;
+            this.lbxHistory.IntegralHeight = false;
             this.lbxHistory.ItemHeight = 16;
             this.lbxHistory.Location = new System.Drawing.Point(0, 0);
             this.lbxHistory.Margin = new System.Windows.Forms.Padding(0);
             this.lbxHistory.Name = "lbxHistory";
-            this.lbxHistory.Size = new System.Drawing.Size(1045, 88);
+            this.lbxHistory.Size = new System.Drawing.Size(1045, 90);
             this.lbxHistory.TabIndex = 6;
             this.lbxHistory.SelectedIndexChanged += new System.EventHandler(this.lbxHistory_SelectedIndexChanged);
             this.lbxHistory.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lbxHistory_KeyUp);
