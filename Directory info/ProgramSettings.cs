@@ -31,7 +31,7 @@ namespace Directory_info
 			{
 				_document.Load(_fileName);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Create a new XML document and set the root node.
 				_document = new XmlDocument();
@@ -56,7 +56,7 @@ namespace Directory_info
 			{
 				return _document.DocumentElement.SelectSingleNode(section + "/" + name).InnerText;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return "";
 			}
@@ -178,4 +178,12 @@ namespace Directory_info
 
         }
 	}
+
+    public class AppSettings
+    {
+        public Int32 Left { get; set; }
+        public Int32 Top { get; set; }
+        public Int32 Width { get; set; }
+        public Int32 Height { get; set; }
+    }
 }

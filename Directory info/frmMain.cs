@@ -6,15 +6,18 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Directory_info
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
     public partial class frmMain : Form
     {
         // Definición de variables
+        private AppSettings _settings = new AppSettings();
+        private static readonly string _settingsFileName = "Configuration.json";
         private const String strArchivosSueltos = "Xtras (archivos)";
         private const int WM_USER = 0x0400;
         //private Boolean _shouldStop;
@@ -108,7 +111,7 @@ namespace Directory_info
         /// </summary>
         /// <param name="m"></param>
         protected override void WndProc(ref Message m)
-        {
+        { 
             if (m.Msg == WM_USER)
                 hilo_AlFinalizarHiloProc(hilo.GetDirLista(), hilo.GetDirRuta());
 
@@ -188,17 +191,17 @@ namespace Directory_info
 
         private void configurarPáginaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            chart.Printing.PageSetup();
+            //chart.Printing.PageSetup();
         }
 
         private void vistaPreviaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            chart.Printing.PrintPreview();
+            //chart.Printing.PrintPreview();
         }
 
         private void imprimirToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            chart.Printing.Print(true);
+            //chart.Printing.Print(true);
         }
 
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
@@ -254,7 +257,7 @@ namespace Directory_info
             }
 
             // Definición de variables
-            System.IO.MemoryStream stream = null;
+            using System.IO.MemoryStream stream = new System.IO.MemoryStream();
 
             // Cambiar el cursor
             this.Cursor = Cursors.WaitCursor;
@@ -262,16 +265,17 @@ namespace Directory_info
             try
             {
                 // create a memory stream to save the chart image    
-                stream = new System.IO.MemoryStream();
+                //stream = new System.IO.MemoryStream();
 
                 // save the chart image to the stream    
-                chart.SaveImage(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                //chart.SaveImage(stream, System.Drawing.Imaging.ImageFormat.Bmp);
 
                 // create a bitmap using the stream    
-                Bitmap bmp = new Bitmap(stream);
+                //using Bitmap bmp = new Bitmap(stream);
 
                 // save the bitmap to the clipboard    
-                Clipboard.SetDataObject(bmp);
+                Clipboard.SetImage(formsPlot1.plt.GetBitmap());
+                //Clipboard.SetDataObject(bmp);
 
                 // Mostrar un mensaje para indicar que la operación se ha realizado correctamente
                 MessageBox.Show("El gráfico ha sido copiado\ncorrectamente al portapapeles.",
@@ -325,40 +329,11 @@ namespace Directory_info
                 // Set image file format
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    ChartImageFormat format = ChartImageFormat.Bmp;
-
                     this.Cursor = Cursors.WaitCursor;
 
-                    switch (saveFileDialog.FilterIndex)
-                    {
-                        case 1:     // BMP
-                            format = ChartImageFormat.Bmp;
-                            break;
-                        case 2:     // EMF
-                            format = ChartImageFormat.Emf;
-                            break;
-                        case 3:     // EMF Dual
-                            format = ChartImageFormat.EmfDual;
-                            break;
-                        case 4:     // EMF Plus
-                            format = ChartImageFormat.EmfPlus;
-                            break;
-                        case 5:     // GIF
-                            format = ChartImageFormat.Gif;
-                            break;
-                        case 6:     // JPG
-                            format = ChartImageFormat.Jpeg;
-                            break;
-                        case 7:     // PNG
-                            format = ChartImageFormat.Png;
-                            break;
-                        case 8:     // TIF
-                            format = ChartImageFormat.Tiff;
-                            break;
-                    }
-
                     // Save image
-                    chart.SaveImage(saveFileDialog.FileName, format);
+                    //chart.SaveImage(saveFileDialog.FileName, format);
+                    formsPlot1.plt.SaveFig(saveFileDialog.FileName);
 
                     // Mostrar un mensaje para indicar que la operación se ha realizado correctamente
                     MessageBox.Show("El gráfico ha sido exportado\ncorrectamente.",
@@ -605,7 +580,7 @@ namespace Directory_info
                 {
                     lbxHistory.Items.RemoveAt(index);
                     listaDirHistoria.RemoveAt(index);
-                    indexTotal -= 1;
+                    indexTotal--;
                     //indexActual = indexTotal;
                     if (index == 0)
                         lbxHistory.SelectedIndex = indexTotal > -1 ? 0 : -1;
@@ -752,6 +727,7 @@ namespace Directory_info
         /// </summary>
         private void InitializeChart2()
         {
+            formsPlot1.plt.Clear();
             formsPlot1.plt.Title("Folder percentage", fontSize: 16);
             formsPlot1.plt.Colorset(ScottPlot.Drawing.Colorset.Nord);
             formsPlot1.plt.Grid(false);
@@ -762,6 +738,7 @@ namespace Directory_info
             formsPlot1.plt.Style(figBg: Color.White);
             formsPlot1.plt.Style(dataBg: Color.White);
             formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
+            formsPlot1.Render();
         }
 
         private void PopulateChart2(List<DirInfo> dir)
@@ -814,6 +791,7 @@ namespace Directory_info
             formsPlot1.Render();
         }
 
+        /*
         private void InitializeChart()
         {
             // Crear el área, la leyenda y la serie
@@ -918,7 +896,7 @@ namespace Directory_info
             // Set the tooltip of the collected pie slice
             series1["CollectedToolTip"] = "Otros";
         }
-
+        */
  
         private long getDirSize(List<DirInfo> dirLista)
         {
@@ -1045,10 +1023,14 @@ namespace Directory_info
             
             // Construcción de la cadena de información:
             lTamañoTotal = getDirSize(dirLista);
+            //strTexto = String.Format("La ruta '{0}' presenta las siguientes características:\n", strRuta);
+            //strTexto += String.Format("Tamaño total: {0} MegaBytes.\n", SizeConversion(lTamañoTotal, ConversionOptions.BytesToMega).ToString("0.##"));
+            //strTexto += String.Format("Número de carpetas: {0}.\n", getDirFolders(dirLista).ToString());
+            //strTexto += String.Format("Número de archivos: {0}.", getDirFiles(dirLista).ToString());
             strTexto = String.Format("La ruta '{0}' presenta las siguientes características:\n", strRuta);
-            strTexto += String.Format("Tamaño total: {0} MegaBytes.\n", SizeConversion(lTamañoTotal, ConversionOptions.BytesToMega).ToString("0.##"));
-            strTexto += String.Format("Número de carpetas: {0}.\n", getDirFolders(dirLista).ToString());
-            strTexto += String.Format("Número de archivos: {0}.", getDirFiles(dirLista).ToString());
+            strTexto += String.Format("Total size: {0} MegaBytes.\n", SizeConversion(lTamañoTotal, ConversionOptions.BytesToMega).ToString("0.##"));
+            strTexto += String.Format("Number of folders: {0}.\n", getDirFolders(dirLista).ToString());
+            strTexto += String.Format("Number of files: {0}.", getDirFiles(dirLista).ToString());
 
             lblResults.Text = strTexto;
 
@@ -1058,9 +1040,10 @@ namespace Directory_info
         {
             // Borrar los controles
             lstLista.Items.Clear();
-            chart.Series["Porcentaje"].Points.Clear();
+            //chart.Series["Porcentaje"].Points.Clear();
             lbxHistory.Items.Clear();
             lblResults.Text = "";
+            InitializeChart2();
 
             // Inicializar las variables
             listaDirHistoria.Clear();
@@ -1103,7 +1086,7 @@ namespace Directory_info
                 this.statuslblInfo.Text = "Cancelando el cálculo...";
                 
                 // Abortar y esperar a que finalice el hilo
-                thread.Abort();                
+                thread.Interrupt();
                 thread.Join();
                 thread = null;
 
@@ -1163,6 +1146,76 @@ namespace Directory_info
 
             // Save the program settings.
             _programSettings.Save();
+        }
+
+        private void LoadProgramSettingsJSON()
+        {
+            try
+            {
+                var jsonString = File.ReadAllText(_settingsFileName);
+                _settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+
+                this.StartPosition = FormStartPosition.Manual;
+                this.DesktopLocation = new Point(_settings.Left, _settings.Top);
+                this.ClientSize = new Size(_settings.Width, _settings.Height);
+            }
+            catch (FileNotFoundException)
+            {
+            }
+            catch (Exception ex)
+            {
+                using (new CenterWinDialog(this))
+                {
+                    MessageBox.Show(this,
+                        "Error loading settings file\n\n" + ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveProgramSettingsJSON()
+        {
+            _settings.Left = DesktopLocation.X;
+            _settings.Top = DesktopLocation.Y;
+            _settings.Width = ClientSize.Width;
+            _settings.Height = ClientSize.Height;
+
+            var jsonString = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_settingsFileName, jsonString);
+
+            Int32 i = 0, j;
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+            writer.WriteStartObject();
+            foreach (var listaDir in listaDirHistoria)
+            {
+                writer.WritePropertyName("Directory" + i.ToString());
+                writer.WriteStartArray();
+                j = 0;
+                foreach (DirInfo dir in listaDir)
+                {
+                    writer.WritePropertyName("SubDirectory" + j.ToString());
+                    
+                    writer.WriteStartObject();
+                    writer.WriteString("Name", dir.Nombre);
+                    writer.WriteString("Path", dir.Ruta);
+                    writer.WriteNumber("Folders", dir.Carpetas);
+                    writer.WriteNumber("Files", dir.Archivos);
+                    writer.WriteNumber("Percentage", dir.porcentaje);
+                    writer.WriteNumber("Bytes", dir.bytes);
+                    writer.WriteNumber("KB", dir.kilo);
+                    writer.WriteNumber("MB", dir.mega);
+                    writer.WriteNumber("GB", dir.giga);
+                    writer.WriteEndObject();
+
+                    j++;
+                }
+                i++;
+            }
+            writer.WriteEndObject();
+            File.AppendAllText(_settingsFileName, Encoding.UTF8.GetString(stream.ToArray()));
         }
 
         #endregion Program settings

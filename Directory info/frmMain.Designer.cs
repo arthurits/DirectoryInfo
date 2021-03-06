@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea36 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend36 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series36 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +50,6 @@
             this.lstLista = new System.Windows.Forms.ListView();
             this.splitVertical = new System.Windows.Forms.SplitContainer();
             this.formsPlot1 = new ScottPlot.FormsPlot();
-            this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statuslblInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.statuslblA = new System.Windows.Forms.ToolStripStatusLabel();
@@ -65,7 +61,6 @@
             this.splitVertical.Panel1.SuspendLayout();
             this.splitVertical.Panel2.SuspendLayout();
             this.splitVertical.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitHorizontal)).BeginInit();
             this.splitHorizontal.Panel1.SuspendLayout();
@@ -245,7 +240,6 @@
             // splitVertical.Panel2
             // 
             this.splitVertical.Panel2.Controls.Add(this.formsPlot1);
-            this.splitVertical.Panel2.Controls.Add(this.chart);
             this.splitVertical.Size = new System.Drawing.Size(1045, 465);
             this.splitVertical.SplitterDistance = 524;
             this.splitVertical.SplitterWidth = 5;
@@ -261,25 +255,6 @@
             this.formsPlot1.Name = "formsPlot1";
             this.formsPlot1.Size = new System.Drawing.Size(516, 465);
             this.formsPlot1.TabIndex = 1;
-            // 
-            // chart
-            // 
-            chartArea36.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea36);
-            legend36.Name = "Legend1";
-            this.chart.Legends.Add(legend36);
-            this.chart.Location = new System.Drawing.Point(0, 0);
-            this.chart.Margin = new System.Windows.Forms.Padding(4);
-            this.chart.Name = "chart";
-            this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series36.ChartArea = "ChartArea1";
-            series36.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series36.Legend = "Legend1";
-            series36.Name = "Series1";
-            this.chart.Series.Add(series36);
-            this.chart.Size = new System.Drawing.Size(496, 430);
-            this.chart.TabIndex = 0;
-            this.chart.Text = "chart1";
             // 
             // statusStrip1
             // 
@@ -386,7 +361,6 @@
             this.splitVertical.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitVertical)).EndInit();
             this.splitVertical.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitHorizontal.Panel1.ResumeLayout(false);
@@ -411,7 +385,6 @@
         private System.Windows.Forms.ListView lstLista;
         private System.Windows.Forms.SplitContainer splitVertical;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart;
         private System.Windows.Forms.ToolStripStatusLabel statuslblA;
         private System.Windows.Forms.ToolStripStatusLabel statuslblInfo;
         private System.Windows.Forms.SplitContainer splitHorizontal;

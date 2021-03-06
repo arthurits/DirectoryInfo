@@ -27,7 +27,7 @@ namespace Directory_info
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Directory_info
             if (System.IO.File.Exists(path + @"\images\logo@256.png")) this.logoPictureBox.Image = new Bitmap(path + @"\images\logo@256.png");
         }
 
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        //[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
             const int WM_PARENTNOTIFY = 0x210;
