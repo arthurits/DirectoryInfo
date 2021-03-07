@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Directory info")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Small utility to calculate your folders's and files's size in your disk. Built using C#, Winforms, and .NET 5")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Arthurits Ltd.")]
 [assembly: AssemblyProduct("Directory info")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]

@@ -329,7 +329,7 @@
             this.lblResults.BackColor = System.Drawing.SystemColors.Window;
             this.lblResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblResults.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblResults.Location = new System.Drawing.Point(0, 24);
             this.lblResults.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblResults.Name = "lblResults";
@@ -345,7 +345,7 @@
             this.Controls.Add(this.splitHorizontal);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.mnuMenu);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.KeyPreview = true;
             this.MainMenuStrip = this.mnuMenu;
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -353,8 +353,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Directory info";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.Shown += new System.EventHandler(this.frmMain_Shown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
-            this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.mnuMenu.ResumeLayout(false);
             this.mnuMenu.PerformLayout();
             this.splitVertical.Panel1.ResumeLayout(false);

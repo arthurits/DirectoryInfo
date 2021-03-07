@@ -116,8 +116,8 @@ namespace Directory_info
         {
             const int WM_PARENTNOTIFY = 0x210;
             const int WM_LBUTTONDOWN = 0x201;
-            const int WM_LBUTTONUP = 0x202;
-            const int WM_KEYDOWN = 0x100;
+            //const int WM_LBUTTONUP = 0x202;
+            //const int WM_KEYDOWN = 0x100;
             const int WM_KEYUP = 0x101;
             const int VK_ESCAPE = 0x1B;
             const int VK_RETURN = 0x0D;

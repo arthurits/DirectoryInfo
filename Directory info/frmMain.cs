@@ -40,7 +40,11 @@ namespace Directory_info
             if (File.Exists(_path + @"\images\logo.ico")) this.Icon = new Icon(_path + @"\images\logo.ico");
 
             InitializeComponent();
-            
+            // Custom initialization for ListView and Plot
+            InitializeListView();
+            //InitializeChart();
+            InitializeChart2();
+
             // Suscribirse al evento de la clase HiloDir
             hilo = new HiloDir();
             hilo.SetHwnd(this.Handle);
@@ -53,57 +57,22 @@ namespace Directory_info
             indexTotal = -1;
             listaDirHistoria = new List<List<DirInfo>>();
 
-            // Función personalizada para inicializar el control ListView y el Chart
-            InitializeListView();
-            //InitializeChart();
-            InitializeChart2();
-
-            // Ajustar el tamaño
-            SetSize();
-
             // Cargar los valores guardados
             _programSettings = new ProgramSettings(_programSettingsFileName);
-            LoadProgramSettings();
+            //LoadProgramSettings();
+            LoadProgramSettingsJSON();
             if (listaDirHistoria.Count > 0)
             {
                 foreach (List<DirInfo> listaDir in listaDirHistoria)
                 {
-                    PopulateListView(listaDir);
-                    //PopulateChart(listaDir);
-                    PopulateChart2(listaDir);
-
-                    //listaDir[0].Ruta.Substring(0, listaDir[0].Ruta.LastIndexOf("\\"));
-
                     lbxHistory.Items.Add(listaDir[0].Ruta.Substring(0, listaDir[0].Ruta.LastIndexOf("\\")));
-
                     indexTotal += 1;
-                    indexActual = indexTotal;
-
-                    lbxHistory.SelectedIndex = indexTotal;
-
-                    PresentarResultados(listaDir);
                 }
+
+                lbxHistory.SelectedIndex = indexTotal; // This also updates the Plot control since it's equivalent to the user clicking the last item in the ListBox
+                PopulateListView(listaDirHistoria[indexActual]);
+                PresentarResultados(listaDirHistoria[indexActual]);
             }
-
-
-            /*
-            double[] values = { 778, 43, 283, 76, 184 };
-            string[] labels = { "C#", "JAVA", "Python", "F#", "PHP" };
-
-            labels = Enumerable
-                .Range(0, values.Length)
-                .Select(i => $"{labels[i]}\n({values[i]})")
-                .ToArray();
-
-
-            formsPlot1.plt.PlotPie(values, labels);
-
-            formsPlot1.plt.Grid(false);
-            formsPlot1.plt.Frame(false);
-            formsPlot1.plt.Ticks(false, false);
-            formsPlot1.Render();
-            */
-
         }
 
         /// <summary>
@@ -120,30 +89,29 @@ namespace Directory_info
 
 
         #region Eventos del formulario
+        
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (DialogResult.No == MessageBox.Show(
-                                    "¿Está seguro que desea salir\nde la aplicación?",
-                                    "¿Salir?",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Question,
-                                    MessageBoxDefaultButton.Button2))
+            using (new CenterWinDialog(this))
             {
-                // Cancelar el cierre de la ventana
-                e.Cancel = true;
+                if (DialogResult.No == MessageBox.Show(
+                                      "¿Está seguro que desea salir\nde la aplicación?",
+                                      "¿Salir?",
+                                      MessageBoxButtons.YesNo,
+                                      MessageBoxIcon.Question,
+                                      MessageBoxDefaultButton.Button2))
+                {
+                    // Cancelar el cierre de la ventana
+                    e.Cancel = true;
+                }
             }
 
             // Si hay algún hilo abierto, entonces hay que cerrarlo antes de salir de la aplicación
             HiloAbortar();
 
             // Guardar los datos de configuración
-            SaveProgramSettings();
-        }
-
-        private void frmMain_Resize(object sender, EventArgs e)
-        {
-            // Llamar a la subrutina que ajusta los controles en el formulario
-            SetSize();
+            //SaveProgramSettings();
+            SaveProgramSettingsJSON();
         }
 
         private void frmMain_KeyPress(object sender, KeyPressEventArgs e)
@@ -154,8 +122,16 @@ namespace Directory_info
             return;
         }
 
+        private void frmMain_Shown(object sender, EventArgs e)
+        {
+            // Signal the native process (that launched us) to close the splash screen
+            using var closeSplashEvent = new EventWaitHandle(false, EventResetMode.ManualReset, "CloseSplashScreenEvent");
+            closeSplashEvent.Set();
+        }
+
         /// <summary>
         /// Rutina para ajustar el tamaño y posición de los controles en el formulario
+        /// Deprecated. Controls are already docked to the form
         /// </summary>
         private void SetSize()
         {
@@ -169,6 +145,7 @@ namespace Directory_info
             //chart.Size = splitVertical.Panel2.ClientSize;
             //chart.Height -= 4;
         }
+        
         #endregion Eventos del formulario
 
         #region Elementos del menú principal
@@ -728,7 +705,7 @@ namespace Directory_info
         private void InitializeChart2()
         {
             formsPlot1.plt.Clear();
-            formsPlot1.plt.Title("Folder percentage", fontSize: 16);
+            formsPlot1.plt.Title("Folder percentage", fontSize: 16, bold: false);
             formsPlot1.plt.Colorset(ScottPlot.Drawing.Colorset.Nord);
             formsPlot1.plt.Grid(false);
             formsPlot1.plt.Frame(false);
@@ -738,6 +715,7 @@ namespace Directory_info
             formsPlot1.plt.Style(figBg: Color.White);
             formsPlot1.plt.Style(dataBg: Color.White);
             formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
+            formsPlot1.plt.PlotPie(new double [ 1 ], showPercentages: true, showValues: false, showLabels: false);
             formsPlot1.Render();
         }
 
@@ -1150,14 +1128,46 @@ namespace Directory_info
 
         private void LoadProgramSettingsJSON()
         {
+            listaDirHistoria = new List<List<DirInfo>>();
             try
             {
-                var jsonString = File.ReadAllText(_settingsFileName);
-                _settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+                string jsonString = File.ReadAllText(_settingsFileName);
+                var options = new JsonDocumentOptions { AllowTrailingCommas = true, CommentHandling = JsonCommentHandling.Skip };
+
+                using JsonDocument document = JsonDocument.Parse(jsonString, options);
+                
+                JsonElement element = document.RootElement.GetProperty("GUI");
 
                 this.StartPosition = FormStartPosition.Manual;
-                this.DesktopLocation = new Point(_settings.Left, _settings.Top);
-                this.ClientSize = new Size(_settings.Width, _settings.Height);
+                this.DesktopLocation = new Point(element.GetProperty("Left").GetInt32(), element.GetProperty("Top").GetInt32());
+                this.ClientSize = new Size(element.GetProperty("Width").GetInt32(), element.GetProperty("Height").GetInt32());
+
+                element = document.RootElement.GetProperty("DirInfo");
+
+                DirInfo dir;
+                int i = 0;
+                foreach (JsonProperty Folder in element.EnumerateObject())
+                {
+                    listaDirHistoria.Add(new List<DirInfo>());
+                    foreach (JsonElement SubFolder in Folder.Value.EnumerateArray())
+                    {
+                        JsonElement SubF = SubFolder.EnumerateObject().ElementAt(0).Value;
+                        
+                        dir.Nombre = SubF.GetProperty("Name").GetString();
+                        dir.Ruta = SubF.GetProperty("Path").GetString();
+                        dir.Carpetas = SubF.GetProperty("Folders").GetInt32();
+                        dir.Archivos = SubF.GetProperty("Files").GetInt32();
+                        dir.porcentaje = SubF.GetProperty("Percentage").GetDouble();
+                        dir.bytes = SubF.GetProperty("Bytes").GetInt64();
+                        dir.kilo = SubF.GetProperty("KB").GetDouble();
+                        dir.mega = SubF.GetProperty("MB").GetDouble();
+                        dir.giga = SubF.GetProperty("GB").GetDouble();
+                        listaDirHistoria[0].Add(dir);
+                    }
+                    i++;
+                }
+
+
             }
             catch (FileNotFoundException)
             {
@@ -1175,28 +1185,50 @@ namespace Directory_info
             }
         }
 
+        /// <summary>
+        /// Saves into a JSON text file in _settingsFileName
+        /// https://devblogs.microsoft.com/dotnet/try-the-new-system-text-json-apis/
+        /// </summary>
         private void SaveProgramSettingsJSON()
         {
-            _settings.Left = DesktopLocation.X;
-            _settings.Top = DesktopLocation.Y;
-            _settings.Width = ClientSize.Width;
-            _settings.Height = ClientSize.Height;
+            //_settings.Left = DesktopLocation.X;
+            //_settings.Top = DesktopLocation.Y;
+            //_settings.Width = ClientSize.Width;
+            //_settings.Height = ClientSize.Height;
 
-            var jsonString = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(_settingsFileName, jsonString);
+            //var jsonString = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
+            //File.WriteAllText(_settingsFileName, jsonString);
+
+            //using FileStream createStream = File.Create(_settingsFileName);
+            //using var writer = new Utf8JsonWriter(createStream, options: writerOptions);
 
             Int32 i = 0, j;
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+            //using var stream = new MemoryStream();
+            //using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+            using FileStream createStream = File.Create(_settingsFileName);
+            using var writer = new Utf8JsonWriter(createStream, new JsonWriterOptions { Indented = true });
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("GUI");
+            writer.WriteStartObject();
+            writer.WriteNumber("Left", DesktopLocation.X);
+            writer.WriteNumber("Top", DesktopLocation.Y);
+            writer.WriteNumber("Width", ClientSize.Width);
+            writer.WriteNumber("Height", ClientSize.Height);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("DirInfo");
             writer.WriteStartObject();
             foreach (var listaDir in listaDirHistoria)
             {
-                writer.WritePropertyName("Directory" + i.ToString());
+                writer.WritePropertyName("Folder " + i.ToString());
                 writer.WriteStartArray();
+                //writer.WriteStartObject();
                 j = 0;
                 foreach (DirInfo dir in listaDir)
                 {
-                    writer.WritePropertyName("SubDirectory" + j.ToString());
+                    writer.WriteStartObject();
+                    writer.WritePropertyName("SubFolder " + j.ToString());
                     
                     writer.WriteStartObject();
                     writer.WriteString("Name", dir.Nombre);
@@ -1210,15 +1242,21 @@ namespace Directory_info
                     writer.WriteNumber("GB", dir.giga);
                     writer.WriteEndObject();
 
+                    writer.WriteEndObject();
                     j++;
                 }
+                writer.WriteEndArray();
+                //writer.WriteEndObject();
                 i++;
             }
             writer.WriteEndObject();
-            File.AppendAllText(_settingsFileName, Encoding.UTF8.GetString(stream.ToArray()));
+            writer.WriteEndObject();
+            writer.Flush();
+            //File.WriteAllText(_settingsFileName, Encoding.UTF8.GetString(stream.ToArray()));
         }
 
         #endregion Program settings
+
     }
 
 }

@@ -1,7 +1,7 @@
 # MemoryNumbers
-A small utility so calculte the space of your folders on your disk. Built using C#, Winforms, and .NET
+Small utility to calculate your folders's and files's size in your disk. Built using C#, Winforms, and .NET 5
 
-Copyright © 2020 by arthurits
+Copyright © 2021 by arthurits
 
 Latest release: alpha v0.1     |     [Downloading & release notes](https://github.com/arthurits/DirectoryInfo/releases)
 
