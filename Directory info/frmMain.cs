@@ -16,7 +16,7 @@ namespace Directory_info
     public partial class frmMain : Form
     {
         // Definición de variables
-        private AppSettings _settings = new AppSettings();
+        private AppSettings _settings = new();
         private static readonly string _settingsFileName = "Configuration.json";
         private const String strArchivosSueltos = "Xtras (archivos)";
         private const int WM_USER = 0x0400;
@@ -36,7 +36,7 @@ namespace Directory_info
         public frmMain()
         {
             // Set form icon
-            string _path = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            string _path = Path.GetDirectoryName(Environment.ProcessPath);
             if (File.Exists(_path + @"\images\logo.ico")) this.Icon = new Icon(_path + @"\images\logo.ico");
 
             InitializeComponent();
@@ -65,7 +65,7 @@ namespace Directory_info
             {
                 foreach (List<DirInfo> listaDir in listaDirHistoria)
                 {
-                    lbxHistory.Items.Add(listaDir[0].Ruta.Substring(0, listaDir[0].Ruta.LastIndexOf("\\")));
+                    lbxHistory.Items.Add(listaDir[0].Ruta[..listaDir[0].Ruta.LastIndexOf("\\")]);
                     indexTotal += 1;
                 }
 
@@ -191,13 +191,13 @@ namespace Directory_info
         #region Menú Edición
         private void selDirToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            FolderBrowserDialog folderBrowser = new();
             
             if (folderBrowser.ShowDialog() != DialogResult.OK)
                 return;
             
             // Definición de variables
-            DirectoryInfo dir = new DirectoryInfo(folderBrowser.SelectedPath);
+            DirectoryInfo dir = new(folderBrowser.SelectedPath);
 
             // Llamar a la rutina para calcular los datos del directorio
             //CalcularDirectorio(dir.FullName);
@@ -234,7 +234,7 @@ namespace Directory_info
             }
 
             // Definición de variables
-            using System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            using System.IO.MemoryStream stream = new();
 
             // Cambiar el cursor
             this.Cursor = Cursors.WaitCursor;
@@ -251,7 +251,7 @@ namespace Directory_info
                 //using Bitmap bmp = new Bitmap(stream);
 
                 // save the bitmap to the clipboard    
-                Clipboard.SetImage(formsPlot1.plt.GetBitmap());
+                Clipboard.SetImage(formsPlot1.Plot.GetBitmap());
                 //Clipboard.SetDataObject(bmp);
 
                 // Mostrar un mensaje para indicar que la operación se ha realizado correctamente
@@ -279,7 +279,7 @@ namespace Directory_info
         private void exportarImagenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create a new save file dialog
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            SaveFileDialog saveFileDialog = new();
 
             // Si no existen datos almacenados en listaDirHistoria (no hay gráfico)
             if (indexActual == -1)
@@ -310,7 +310,7 @@ namespace Directory_info
 
                     // Save image
                     //chart.SaveImage(saveFileDialog.FileName, format);
-                    formsPlot1.plt.SaveFig(saveFileDialog.FileName);
+                    formsPlot1.Plot.SaveFig(saveFileDialog.FileName);
 
                     // Mostrar un mensaje para indicar que la operación se ha realizado correctamente
                     MessageBox.Show("El gráfico ha sido exportado\ncorrectamente.",
@@ -334,7 +334,7 @@ namespace Directory_info
         private void exportarDatosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create a new save file dialog
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            SaveFileDialog saveFileDialog = new();
 
             // Si no existen datos almacenados en listaDirHistoria              
             if (indexActual == -1)
@@ -638,7 +638,7 @@ namespace Directory_info
                 //item.SubItems[3].Text = d.Carpetas.ToString();
                 //item.SubItems[4].Text = d.Archivos.ToString();
 
-                item = new ListViewItem(new string[] { d.Nombre, d.mega.ToString("0.00"), d.porcentaje.ToString("#0.00"), d.Carpetas.ToString("0"), d.Archivos.ToString("0") });
+                item = new(new string[] { d.Nombre, d.mega.ToString("0.00"), d.porcentaje.ToString("#0.00"), d.Carpetas.ToString("0"), d.Archivos.ToString("0") });
                 item.Name = i++.ToString();    // Se utiliza en lstLista_ItemActivate para saber el índice del elemento seleccionado
                 lstLista.Items.Add(item);
             }
@@ -653,7 +653,7 @@ namespace Directory_info
         private void InitializeListView()
         {
             // Definición de variables
-            ColumnHeader encabezado = new ColumnHeader();
+            ColumnHeader encabezado = new();
 
             // Borrar cualquier formato previo
             lstLista.Clear();
@@ -666,34 +666,42 @@ namespace Directory_info
             lstLista.Columns.Add(encabezado);
 
             // Añadir la columna 2
-            encabezado = new ColumnHeader();
-            encabezado.Text = "Tamaño (MB)";
-            encabezado.Width = 95;
-            encabezado.TextAlign = HorizontalAlignment.Right;
+            encabezado = new()
+            {
+                Text = "Tamaño (MB)",
+                Width = 95,
+                TextAlign = HorizontalAlignment.Right
+            };
 
             lstLista.Columns.Add(encabezado);
 
             // Añadir la columna 3
-            encabezado = new ColumnHeader();
-            encabezado.Text = "Porcentaje (%)";
-            encabezado.Width = 110;
-            encabezado.TextAlign = HorizontalAlignment.Right;
+            encabezado = new()
+            {
+                Text = "Porcentaje (%)",
+                Width = 110,
+                TextAlign = HorizontalAlignment.Right
+            };
 
             lstLista.Columns.Add(encabezado);
 
             // Añadir la columna 4
-            encabezado = new ColumnHeader();
-            encabezado.Text = "Carpetas";
-            encabezado.Width = 80;
-            encabezado.TextAlign = HorizontalAlignment.Right;
+            encabezado = new()
+            {
+                Text = "Carpetas",
+                Width = 80,
+                TextAlign = HorizontalAlignment.Right
+            };
 
             lstLista.Columns.Add(encabezado);
 
             // Añadir la columna 5
-            encabezado = new ColumnHeader();
-            encabezado.Text = "Archivos";
-            encabezado.Width = 80;
-            encabezado.TextAlign = HorizontalAlignment.Right;
+            encabezado = new()
+            {
+                Text = "Archivos",
+                Width = 80,
+                TextAlign = HorizontalAlignment.Right
+            };
 
             lstLista.Columns.Add(encabezado);
 
@@ -704,19 +712,21 @@ namespace Directory_info
         /// </summary>
         private void InitializeChart2()
         {
-            formsPlot1.plt.Clear();
-            formsPlot1.plt.Title("Folder percentage", fontSize: 16, bold: false);
-            formsPlot1.plt.Colorset(ScottPlot.Drawing.Colorset.Nord);
-            formsPlot1.plt.Grid(false);
-            formsPlot1.plt.Frame(false);
-            formsPlot1.plt.Ticks(false, false);
-            formsPlot1.plt.Legend(enableLegend: true, location: ScottPlot.legendLocation.lowerRight);
-            formsPlot1.plt.TightenLayout(padding: 0);
-            formsPlot1.plt.Style(figBg: Color.White);
-            formsPlot1.plt.Style(dataBg: Color.White);
-            formsPlot1.plt.AntiAlias(figure: true, data: true, legend: true);
-            formsPlot1.plt.PlotPie(new double [ 1 ], showPercentages: true, showValues: false, showLabels: false);
-            formsPlot1.Render();
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Folder percentage",size: 16, bold: false);
+            formsPlot1.Plot.Palette = ScottPlot.Drawing.Palette.Nord;
+            formsPlot1.Plot.Grid(false);
+            formsPlot1.Plot.Frameless();
+            //formsPlot1.Plot.Ticks(false, false);
+            formsPlot1.Plot.Legend(enable: true, location: ScottPlot.Alignment.LowerRight);
+            //formsPlot1.Plot.TightenLayout(padding: 0);
+            formsPlot1.Plot.Style(figureBackground: Color.White, dataBackground: Color.White);
+            //formsPlot1.Plot.AntiAlias(figure: true, data: true, legend: true);
+            var plot = formsPlot1.Plot.AddPie(new double [ 1 ],hideGridAndFrame: true);
+            plot.ShowPercentages = true;
+            plot.ShowValues = false;
+            plot.ShowLabels = false;
+            formsPlot1.Refresh();
         }
 
         private void PopulateChart2(List<DirInfo> dir)
@@ -764,9 +774,14 @@ namespace Directory_info
                 .Select(i => $"{labels[i]}")
                 .ToArray();
 
-            formsPlot1.plt.Clear();
-            formsPlot1.plt.PlotPie(values, labels, showPercentages: true, showValues: false, showLabels: false);
-            formsPlot1.Render();
+            formsPlot1.Plot.Clear();
+            //formsPlot1.plt.AddPie(values, labels, showPercentages: true, showValues: false, showLabels: false);
+            var plot = formsPlot1.Plot.AddPie(values);
+            plot.SliceLabels = labels;
+            plot.ShowPercentages = true;
+            plot.ShowValues = false;
+            plot.ShowLabels = false;
+            formsPlot1.Refresh();
         }
 
         /*
@@ -876,7 +891,7 @@ namespace Directory_info
         }
         */
  
-        private long getDirSize(List<DirInfo> dirLista)
+        private long GetDirSize(List<DirInfo> dirLista)
         {
             // Definición de variables
             long lTamañoTotal = 0;
@@ -889,7 +904,7 @@ namespace Directory_info
             return (lTamañoTotal);
         }
 
-        private int getDirFiles(List<DirInfo> dirLista)
+        private int GetDirFiles(List<DirInfo> dirLista)
         {
             // Definición de variables
             int nFiles = 0;
@@ -905,7 +920,7 @@ namespace Directory_info
             return (nFiles);
         }
 
-        private int getDirFolders(List<DirInfo> dirLista)
+        private int GetDirFolders(List<DirInfo> dirLista)
         {
             // Definición de variables
             int nFolders = 0;
@@ -997,18 +1012,18 @@ namespace Directory_info
             String strTexto;
             
             // Quitar el nombre al final de la cadena para quedarse con el directorio raíz
-            strRuta = strRuta.Substring(0, strRuta.IndexOf(dirLista[0].Nombre) - 1);
+            strRuta = strRuta[..(strRuta.IndexOf(dirLista[0].Nombre) - 1)];
             
             // Construcción de la cadena de información:
-            lTamañoTotal = getDirSize(dirLista);
+            lTamañoTotal = GetDirSize(dirLista);
             //strTexto = String.Format("La ruta '{0}' presenta las siguientes características:\n", strRuta);
             //strTexto += String.Format("Tamaño total: {0} MegaBytes.\n", SizeConversion(lTamañoTotal, ConversionOptions.BytesToMega).ToString("0.##"));
             //strTexto += String.Format("Número de carpetas: {0}.\n", getDirFolders(dirLista).ToString());
             //strTexto += String.Format("Número de archivos: {0}.", getDirFiles(dirLista).ToString());
             strTexto = String.Format("La ruta '{0}' presenta las siguientes características:\n", strRuta);
             strTexto += String.Format("Total size: {0} MegaBytes.\n", SizeConversion(lTamañoTotal, ConversionOptions.BytesToMega).ToString("0.##"));
-            strTexto += String.Format("Number of folders: {0}.\n", getDirFolders(dirLista).ToString());
-            strTexto += String.Format("Number of files: {0}.", getDirFiles(dirLista).ToString());
+            strTexto += String.Format("Number of folders: {0}.\n", GetDirFolders(dirLista).ToString());
+            strTexto += String.Format("Number of files: {0}.", GetDirFiles(dirLista).ToString());
 
             lblResults.Text = strTexto;
 
